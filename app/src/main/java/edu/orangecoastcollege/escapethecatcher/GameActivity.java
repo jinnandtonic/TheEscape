@@ -161,13 +161,13 @@ public class GameActivity extends AppCompatActivity implements GestureDetector.O
     }
 
 
+    // This method gets called by the onFling event
     private void movePlayer(float velocityX, float velocityY) {
-        // TODO: This method gets called by the onFling event
-        // TODO: Be sure to implement the move method in the Player (model) class
+        // TODO: implement the move method in the Player (model) class
 
         float absX = Math.abs(velocityX);
         float absY = Math.abs(velocityY);
-        String direction = "UNKNOWN";
+        String direction = "UNKNOWN"; // TODO: make direction constants
 
         // Determine which absolute velocity is greater (x or y)
         if (absX >= absY) {
@@ -203,11 +203,15 @@ public class GameActivity extends AppCompatActivity implements GestureDetector.O
 
         // 1) check if Player has reached the exit (WIN)
         if (player.getRow() == exitRow && player.getCol() == exitCol) {
-            // TODO: this
+            wins++;
+            // TODO: images
+            startNewGame();
         }
         // 2) check if Player and Zombie are touching (LOSE)
         else if (player.getRow() == zombie.getRow() && player.getCol() == zombie.getCol()) {
-            // TODO: this
+            losses++;
+            // TODO: images
+            startNewGame();
         }
     }
 
