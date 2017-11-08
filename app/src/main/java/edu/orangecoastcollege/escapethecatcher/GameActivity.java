@@ -73,10 +73,12 @@ public class GameActivity extends AppCompatActivity {
 
     private void startNewGame() {
         //TASK 1:  CLEAR THE BOARD (ALL IMAGE VIEWS)
-        for (int i = 0; i < allGameObjects.size(); i++) {
-            ImageView visualObj = allGameObjects.get(i);
-            activityGameRelativeLayout.removeView(visualObj);
-        }
+//        for (int i = 0; i < allGameObjects.size(); i++) {
+//            ImageView visualObj = allGameObjects.get(i);
+//            activityGameRelativeLayout.removeView(visualObj);
+//        }
+        for (ImageView imageView : allGameObjects)
+            activityGameRelativeLayout.removeView(imageView);
         allGameObjects.clear();
 
         //TASK 2:  REBUILD THE  BOARD
@@ -91,9 +93,32 @@ public class GameActivity extends AppCompatActivity {
     }
 
     private void buildGameBoard() {
-        // TODO: Inflate the entire game board (obstacles and exit)
-        // TODO: (everything but the player and zombie)
+        ImageView viewToInflate;
 
+        // Loop through the board:
+        for (int row = 0; row < ROWS; ++row) {
+            for (int col = 0; col < COLS; ++col) {
+                viewToInflate = null;
+                if (gameBoard[row][col] == BoardCodes.OBSTACLE) {
+                    viewToInflate = (ImageView) layoutInflater.inflate(R.layout.obstacle_layout, null);
+                }
+                else if (gameBoard[row][col] == BoardCodes.EXIT) {
+                    viewToInflate = (ImageView) layoutInflater.inflate(R.layout.exit_layout, null);
+                    exitRow = row;
+                    exitCol = col;
+                }
+
+                if (viewToInflate != null) {
+                    // SET the x and y position of the viewToInflate
+                    viewToInflate.setX(col * SQUARE + OFFSET);
+                    viewToInflate.setY(row * SQUARE + OFFSET);
+
+                    // Add view to relative layout and list of image views
+                    activityGameRelativeLayout.addView(viewToInflate);
+                    allGameObjects.add(viewToInflate);
+                }
+            }
+        }
     }
 
     private void createZombie() {
