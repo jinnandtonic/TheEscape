@@ -122,13 +122,38 @@ public class GameActivity extends AppCompatActivity {
     }
 
     private void createZombie() {
-        // TODO: Determine where to place the Zombie (at game start)
-        // TODO: Then, inflate the zombie layout
+        // Determine where to place the Zombie (at game start)
+        // Then, inflate the zombie layout
+        int row = 2;
+        int col = 4;
+
+        zombieImageView = (ImageView) layoutInflater.inflate(R.layout.zombie_layout, null);
+        zombieImageView.setX(col * SQUARE + OFFSET);
+        zombieImageView.setY(row * SQUARE + OFFSET);
+
+        // Add to relative layout and the list
+        activityGameRelativeLayout.addView(zombieImageView);
+        allGameObjects.add(zombieImageView);
+
+        // instantiate zombie
+        zombie = new Zombie(); // TODO: create a parametrized constructor for Zombie class
+        zombie.setRow(row);
+        zombie.setCol(col);
     }
 
     private void createPlayer() {
-        // TODO: Determine where to place the Player (at game start)
-        // TODO: Then, inflate the player layout
+        // Determine where to place the Player (at game start)
+        // Then, inflate the player layout
+        int row = 1;
+        int col = 1;
+
+        activityGameRelativeLayout.addView(playerImageView);
+        allGameObjects.add(playerImageView);
+
+        playerImageView = (ImageView) layoutInflater.inflate(R.layout.player_layout, null);
+        player = new Player(); // TODO: create a parametrized constructor for Player class
+        playerImageView.setX(row);
+        playerImageView.setY(col);
     }
 
 
