@@ -151,10 +151,13 @@ public class GameActivity extends AppCompatActivity implements GestureDetector.O
         int row = 1;
         int col = 1;
 
+        playerImageView = (ImageView) layoutInflater.inflate(R.layout.player_layout, null);
+        playerImageView.setX(col * SQUARE + OFFSET);
+        playerImageView.setY(col * SQUARE + OFFSET);
+
         activityGameRelativeLayout.addView(playerImageView);
         allGameObjects.add(playerImageView);
 
-        playerImageView = (ImageView) layoutInflater.inflate(R.layout.player_layout, null);
         player = new Player(); // TODO: create a parametrized constructor for Player class
         playerImageView.setX(row);
         playerImageView.setY(col);
@@ -204,50 +207,109 @@ public class GameActivity extends AppCompatActivity implements GestureDetector.O
         // 1) check if Player has reached the exit (WIN)
         if (player.getRow() == exitRow && player.getCol() == exitCol) {
             wins++;
-            // TODO: images
+
+            winsTextView.setText(getString(R.string.wins, wins));
+            activityGameRelativeLayout.removeView(zombieImageView);
+            allGameObjects.remove(zombieImageView);
+            zombieImageView = (ImageView) layoutInflater.inflate(R.layout.bunny_layout, null);
+            activityGameRelativeLayout.addView(zombieImageView);
+            allGameObjects.add(zombieImageView);
+            zombieImageView.setX(zombie.getCol() * SQUARE + OFFSET);
+            zombieImageView.setY(zombie.getRow() * SQUARE + OFFSET);
+
             startNewGame();
         }
         // 2) check if Player and Zombie are touching (LOSE)
         else if (player.getRow() == zombie.getRow() && player.getCol() == zombie.getCol()) {
             losses++;
-            // TODO: images
+            lossesTextView.setText(getString(R.string.losses, losses));
+
+            ImageView bloodImageView = (ImageView) layoutInflater.inflate(R.layout.blood_layout, null);
+            bloodImageView.setTag("blood");
+            activityGameRelativeLayout.addView(bloodImageView);
+            allGameObjects.add(bloodImageView);
+            bloodImageView.setX(zombie.getCol() * SQUARE + OFFSET);
+            bloodImageView.setY(zombie.getRow() * SQUARE + OFFSET);
             startNewGame();
         }
     }
 
+    /**
+     * This method handles touch screen motion events
+     * @param event The motion event
+     * @return True if the event was handled, false otherwise
+     */
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         return gestureDetector.onTouchEvent(event);
     }
 
+    /**
+     * This method is called when user makes contact with the device
+     * @param motionEvent The motion event
+     * @return True if the event was handled, false otherwise
+     */
     @Override
     public boolean onDown(MotionEvent motionEvent) {
         return false;
     }
 
+    /**
+     * Down event where user does not let go, short duration of time
+     * @param motionEvent The motion event triggering the touch
+     */
     @Override
     public void onShowPress(MotionEvent motionEvent) {
 
     }
 
+    /**
+     * Similar to an onSingleTapConfirmed but can be part of a double tap
+     * @param motionEvent The motion event triggering the touch
+     * @return True if the event was handled, false otherwise
+     */
     @Override
     public boolean onSingleTapUp(MotionEvent motionEvent) {
         return false;
     }
 
+    /**
+     * Down event, followed by a press and lateral movement, without releasing
+     * @param motionEvent The event where the scroll originated
+     * @param motionEvent1 The event where the scroll stopped
+     * @param v The distance in X direction (pixels)
+     * @param v1 The distance in Y direction (pixels)
+     * @return True if the event was handled, false otherwise
+     */
     @Override
     public boolean onScroll(MotionEvent motionEvent, MotionEvent motionEvent1, float v, float v1) {
         return false;
     }
 
+    /**
+     * Down event, followed by a long hold.
+     *
+     * @param motionEvent The motion event triggering the touch.
+     */
     @Override
     public void onLongPress(MotionEvent motionEvent) {
 
     }
 
+    /**
+     * Similar to a scroll, with faster velocity and user releases contact with device.
+     *
+     * @param motionEvent  The event where the scroll originated.
+     * @param motionEvent1 The event where the scroll stopped.
+     * @param velocityX    Velocity in the X direction.
+     * @param velocityY    Velocity in the Y direction.
+     * @return True if the event was handled, false otherwise.
+     */
     @Override
-    public boolean onFling(MotionEvent motionEvent, MotionEvent motionEvent1, float v, float v1) {
-        movePlayer(v, v1);
+    public boolean onFling(MotionEvent motionEvent, MotionEvent motionEvent1, float velocityX, float velocityY) {
+        if ((player.getCol() != exitCol || player.getRow() != exitRow)
+                && (player.getCol() != zombie.getCol() || player.getRow() != zombie.getRow()))
+            movePlayer(velocityX, velocityY);
         return true;
     }
 }

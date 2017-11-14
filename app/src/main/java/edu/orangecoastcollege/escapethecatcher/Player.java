@@ -6,10 +6,25 @@ public class Player {
 
     public void move(int[][] gameBoard, String direction) {
 
-        // TODO: Implement the logic for the move operation
-        // TODO: If the gameBoard is obstacle free in the direction requested,
-        // TODO: Move the player in the intended direction.  Otherwise, do nothing (player loses turn)
+        // Implement the logic for the move operation
+        // If the gameBoard is obstacle free in the direction requested,
+        // Move the player in the intended direction.  Otherwise, do nothing (player loses turn)
 
+        switch (direction)
+        {
+            case "UP":
+                if (gameBoard[mRow - 1][mCol] != BoardCodes.OBSTACLE) mRow--;
+                break;
+            case "DOWN":
+                if (gameBoard[mRow + 1][mCol] != BoardCodes.OBSTACLE) mRow++;
+                break;
+            case "LEFT":
+                if (gameBoard[mRow][mCol - 1] != BoardCodes.OBSTACLE) mCol--;
+                break;
+            case "RIGHT":
+                if (gameBoard[mRow][mCol + 1] != BoardCodes.OBSTACLE) mCol++;
+                break;
+        }
     }
 
     public void setRow(int row) {
